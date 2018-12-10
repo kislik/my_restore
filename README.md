@@ -31,14 +31,14 @@ restore:
 > присутсвие `.my.cnf` файла для подключения к базам MySQL из которых будут выполняться бэкапы и MySQL сервер, в которые дынне бэкапы будут восстанавливаться
 ```bash
 # by default suffix `Dump` used for restore backups. All options below are required
-[mysqldumpDump]
+[clientDump]
 host=localhost
 user=root
 password=Root_Password
 port=3306
 
 # by default suffix `Restore` used for restore backups. All options below are required
-[mysqldumpRestore]
+[clientRestore]
 host=localhost
 user=root
 password=Root_Password
