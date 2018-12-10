@@ -9,8 +9,8 @@ class RestoreTable:
                  master_conf='autodump_master.yml',
                  slave_conf='autodump.yml',
                  my_cnf=None,
-                 my_cnf_suffix_dump='mysqldumpDump',
-                 my_cnf_suffix_restore='mysqldumpRestore'):
+                 my_cnf_suffix_dump='Dump',
+                 my_cnf_suffix_restore='Restore'):
 
         self.storage_dir = storage_dir
         self.m_conf = master_conf
@@ -116,22 +116,27 @@ class RestoreTable:
         with open(self.m_conf, 'r', encoding='utf8') as m_conf_file:
             m_info = yaml.load(m_conf_file)
 
-        m_connect = {
-            'user':     m_info['restore']['master']['user'],
-            'password': m_info['restore']['master']['password'],
-            'host':     m_info['restore']['master']['host'],
-            'port':     m_info['restore']['master']['port'],
-        }
+        if 'master' in m_info['restore'].keys():
+            m_connect = {
+                'user':     m_info['restore']['master']['user'],
+                'password': m_info['restore']['master']['password'],
+                'host':     m_info['restore']['master']['host'],
+                'port':     m_info['restore']['master']['port'],
+            }
 
         with open(self.s_conf, 'r', encoding='utf8') as s_conf_file:
             s_info = yaml.load(s_conf_file)
 
-        s_connect = {
-            'user':       s_info['restore']['slave']['user'],
-            'password':   s_info['restore']['slave']['password'],
-            'host':       s_info['restore']['slave']['host'],
-            'port':       s_info['restore']['slave']['port'],
-        }
+        if 'slave' in s_info['restore'].keys():
+            s_connect = {
+                'user':       s_info.get('restore:slave:user', 'root'),
+                'password':   s_info.get('restore:slave:password', 'Root_Password'),
+                'host':       s_info.get('restore:slave:host', 'localhost'),
+                'port':       s_info.get('restore:slave:port', '3306'),
+            }
+        else:
+            print('Error: file `autodump.yml` without key `slave`')
+            sys.exit(1)
 
         for s_db, s_dbs_info in s_info['restore']['slave']['databases'].items():
             for table, add_opt in s_dbs_info.items():
@@ -174,5 +179,5 @@ class RestoreTable:
         return True
 
 
-dumper_instance = RestoreTable(my_cnf='.my.cnf', my_cnf_suffix_dump='mysqldumpDump')
+dumper_instance = RestoreTable(my_cnf='.my.cnf', my_cnf_suffix_dump='Dump')
 dumper_instance.my_backup()
