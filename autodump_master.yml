@@ -1,0 +1,7 @@
+restore:
+  # optional keys if .my.cnf is not being used
+  master:
+    host: mysql.master.host.ru # MySQL master host
+    port: 3306 # MySQL master port
+    user: root # MySQL master user
+    password: Root_Password # MySQL master password

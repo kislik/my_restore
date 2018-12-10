@@ -1,0 +1,37 @@
+restore:
+  slave:
+    # optional keys if .my.cnf is not being used
+    host: 127.0.0.1 # MySQL host to restore a backup
+    port: 3306 # MySQL port
+    user: root # MySQL user
+    password: Root_Password # MySQL user password
+
+    # required keys
+    databases: # required key
+
+      database_name_0: # the name of the database which one we want to backup
+        table_name_0: # the name of the table that we will backup
+          where: False # --where option in mysqldump command (IN BETA!)
+          restore_to_db: restore_db # the name of database for restore a saved table. If `False` will be used master database (in our example - database_name_0)
+        # the same options for table `table_name_1` in `db database_name_0`
+        table_name_1:
+          where: False
+          restore_to_db: restore_db
+
+      # Another examples with the same logic
+      database_name_1:
+        table_name_0:
+          where: False
+          restore_to_db: False
+        table_name_1:
+          where: False
+          restore_to_db: False
+
+      # Another examples with the same logic
+      database_name_2:
+        table_name_0:
+          where: False
+          restore_to_db: False
+        table_name_1:
+          where: False
+          restore_to_db: False
